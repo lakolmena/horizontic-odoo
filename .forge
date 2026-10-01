@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "horizontic",
+    "technology": "unknown",
+    "created": "2026-10-01T08:02:57Z",
+    "description": ""
+  },
+  "containers": {},
+  "networking": {
+    "subdomain": "horizontic.dev.local",
+    "ssl": {
+      "enabled": false
+    }
+  },
+  "environment": {},
+  "scripts": {},
+  "metadata": {
+    "tags": []
+  }
+}
