@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bni_region_user,bni.region user,model_bni_region,base.group_user,1,0,0,0
+access_bni_region_manager,bni.region manager,model_bni_region,base.group_partner_manager,1,1,1,1
+access_bni_grupo_user,bni.grupo user,model_bni_grupo,base.group_user,1,0,0,0
+access_bni_grupo_manager,bni.grupo manager,model_bni_grupo,base.group_partner_manager,1,1,1,1
+access_bni_actividad_user,bni.actividad user,model_bni_actividad,base.group_user,1,0,0,0
+access_bni_actividad_manager,bni.actividad manager,model_bni_actividad,base.group_partner_manager,1,1,1,1

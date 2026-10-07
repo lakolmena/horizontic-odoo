@@ -41,3 +41,10 @@ build/
 tmp/
 temp/
 *.tmp
+
+# Odoo: codigo de terceros (se descarga aparte, ver documentacion/cambios_implementacion.md)
+enterprise/
+community/
+
+# Variables con secretos generadas por FORGE
+.env.forge

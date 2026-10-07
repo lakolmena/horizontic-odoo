@@ -1,0 +1,83 @@
+{
+  "name": "odoo-enterprise",
+  "displayName": "Odoo Enterprise",
+  "description": "Odoo Enterprise Edition - ERP completo con módulos avanzados",
+  "type": "standalone",
+  "versions": ["19", "18", "17", "16", "15", "14"],
+  "features": [
+    "PostgreSQL dedicado",
+    "Módulos Enterprise",
+    "Hot reload en desarrollo",
+    "Multi-compañía",
+    "Gestión avanzada"
+  ],
+  "database": {
+    "type": "postgres",
+    "shared": false,
+    "included": true
+  },
+  "directories": ["app", "config", "backups", "enterprise", "community"],
+  "variables": {
+    "POSTGRES_PASSWORD": {
+      "type": "password",
+      "required": true,
+      "generated": true,
+      "description": "Contraseña de PostgreSQL"
+    },
+    "ODOO_VERSION": {
+      "type": "select",
+      "required": true,
+      "default": "19",
+      "options": ["19", "18", "17", "16", "15", "14"],
+      "description": "Versión de Odoo Enterprise Edition"
+    },
+    "ODOO_ADMIN_USER": {
+      "type": "text",
+      "required": false,
+      "default": "admin",
+      "description": "Usuario administrador de Odoo"
+    },
+    "ODOO_ADMIN_PASSWORD": {
+      "type": "password",
+      "required": false,
+      "default": "admin",
+      "description": "Contraseña del administrador de Odoo"
+    },
+    "ODOO_WITHOUT_DEMO": {
+      "type": "select",
+      "required": false,
+      "default": "True",
+      "options": ["True", "False"],
+      "description": "Instalar sin datos de demostración"
+    },
+    "ODOO_PROXY_MODE": {
+      "type": "select",
+      "required": false,
+      "default": "True",
+      "options": ["True", "False"],
+      "description": "Habilitar modo proxy"
+    },
+    "ODOO_LANG": {
+      "type": "select",
+      "required": false,
+      "default": "es_ES.UTF-8",
+      "options": ["es_ES.UTF-8", "en_US.UTF-8", "fr_FR.UTF-8", "de_DE.UTF-8", "it_IT.UTF-8"],
+      "description": "Idioma por defecto de Odoo"
+    },
+    "ODOO_TIMEZONE": {
+      "type": "select",
+      "required": false,
+      "default": "Europe/Madrid",
+      "options": ["Europe/Madrid", "Europe/London", "Europe/Paris", "America/New_York", "America/Los_Angeles", "UTC"],
+      "description": "Zona horaria de Odoo"
+    },
+    "GITHUB_TOKEN": {
+      "type": "text",
+      "required": true,
+      "description": "Token de GitHub para clonar repositorio Enterprise (obligatorio)"
+    }
+  },
+  "scripts": {
+    "post-create": "./scripts/post-create.sh"
+  }
+}

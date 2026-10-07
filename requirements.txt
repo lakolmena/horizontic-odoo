@@ -1,0 +1,23 @@
+# Dependencias Python adicionales para módulos OCA y custom de Odoo.
+#
+# Añade aquí cualquier paquete pip que requieran los módulos que instales.
+# El Dockerfile las instala al construir la imagen, por lo que tras
+# editar este archivo necesitas reconstruir el contenedor:
+#
+#   docker-compose build odoo && docker-compose up -d odoo
+#
+# Notas:
+# - packaging: necesario para que Odoo parsee constraints de versión en
+#   los manifests de módulos OCA (e.g. "paramiko<4.0.0").
+# - paramiko, pysftp: requeridos por auto_backup (server-tools) y otros
+#   módulos que hagan SFTP/SSH.
+# - cryptography: dependencia transversal de varios módulos OCA.
+
+packaging
+paramiko<4.0.0
+pysftp
+cryptography
+
+# schwifty: requerido por base_bank_from_iban (OCA community-data-files),
+# dependencia de l10n_es_partner.
+schwifty==2024.4.0

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: horizontic_postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=odoo
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=odoo
+    volumes:
+      - odoo_db_data:/var/lib/postgresql/data
+    networks:
+      - forge_horizontic
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ODOO_VERSION: ${ODOO_VERSION:-18}
+    container_name: horizontic_odoo
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8026:8069"
+      - "5461:8072"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=odoo
+      - ODOO_ADMIN_USER=${ODOO_ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ODOO_ADMIN_PASSWORD:-admin}
+      - WITHOUT_DEMO=${ODOO_WITHOUT_DEMO:-True}
+      - PROXY_MODE=${ODOO_PROXY_MODE:-True}
+      - LANG=${ODOO_LANG:-es_ES.UTF-8}
+      - TZ=${ODOO_TIMEZONE:-Europe/Madrid}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    volumes:
+      - odoo_data:/var/lib/odoo
+      - ./app:/mnt/extra-addons
+      - ./enterprise:/mnt/enterprise-addons
+      - ./community:/mnt/community-addons
+      - ./custom_modules:/mnt/custom-addons
+      - ./entrypoint.sh:/custom-entrypoint.sh:ro
+      - ./odoo.conf:/etc/odoo/odoo.conf
+      - ./logs:/var/log/odoo
+    entrypoint: ["/custom-entrypoint.sh"]
+    networks:
+      - forge_horizontic
+
+volumes:
+  odoo_db_data:
+  odoo_data:
+
+networks:
+  forge_horizontic:
+    external: true

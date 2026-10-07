@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form.horizontic</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="l10n_es_partner.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Nombre comercial justo debajo del nombre -->
+            <xpath expr="//sheet//h1" position="after">
+                <field name="comercial" position="move"/>
+            </xpath>
+            <field name="comercial" position="attributes">
+                <attribute name="placeholder">Nombre comercial</attribute>
+                <attribute name="class">w-md-75 fs-5</attribute>
+            </field>
+
+            <field name="function" position="after">
+                <field name="bni_es_miembro" invisible="is_company"/>
+            </field>
+
+            <field name="vat" position="after">
+                <field name="sucesor_id" invisible="active or not is_company"
+                       options="{'no_create': True}"/>
+            </field>
+
+            <xpath expr="//notebook/page[@name='contact_addresses']" position="before">
+                <page name="bni" string="BNI" invisible="is_company or not bni_es_miembro">
+                    <group>
+                        <group>
+                            <field name="bni_region_id" options="{'no_create': True}"/>
+                            <field name="bni_grupo_id" options="{'no_create': True}"
+                                   domain="[('region_id', '=?', bni_region_id)]"/>
+                        </group>
+                        <group>
+                            <field name="bni_estado"/>
+                            <field name="bni_actividad_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_tree" model="ir.ui.view">
+        <field name="name">res.partner.list.horizontic</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <field name="display_name" position="after">
+                <field name="comercial" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter" model="ir.ui.view">
+        <field name="name">res.partner.search.horizontic</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="bni_grupo_id"/>
+                <field name="bni_actividad_id"/>
+            </field>
+            <filter name="inactive" position="before">
+                <filter name="bni_miembro" string="Miembros BNI" domain="[('bni_es_miembro', '=', True)]"/>
+                <separator/>
+            </filter>
+            <filter name="group_country" position="after">
+                <filter name="group_bni_region" string="Region BNI" context="{'group_by': 'bni_region_id'}"/>
+                <filter name="group_bni_grupo" string="Grupo BNI" context="{'group_by': 'bni_grupo_id'}"/>
+                <filter name="group_bni_estado" string="Estado BNI" context="{'group_by': 'bni_estado'}"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

@@ -4,14 +4,16 @@
     "name": "horizontic",
     "technology": "unknown",
     "created": "2026-10-01T08:02:57Z",
-    "description": ""
+    "description": "",
+    "template": "odoo-enterprise"
   },
   "containers": {},
   "networking": {
     "subdomain": "horizontic.dev.local",
     "ssl": {
       "enabled": false
-    }
+    },
+    "port": 8026
   },
   "environment": {},
   "scripts": {},

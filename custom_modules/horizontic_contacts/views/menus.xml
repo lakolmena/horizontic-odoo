@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_bni_config"
+        name="BNI"
+        parent="contacts.res_partner_menu_config"
+        sequence="20"/>
+    <menuitem id="menu_bni_region" action="bni_region_action" parent="menu_bni_config" sequence="10"/>
+    <menuitem id="menu_bni_grupo" action="bni_grupo_action" parent="menu_bni_config" sequence="20"/>
+    <menuitem id="menu_bni_actividad" action="bni_actividad_action" parent="menu_bni_config" sequence="30"/>
+</odoo>
