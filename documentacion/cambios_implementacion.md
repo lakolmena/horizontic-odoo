@@ -2,7 +2,7 @@
 
 Registro de lo que se implementa de forma distinta a `especificacion_tecnica_modulo_odoo.md` y `analisis_implementacion_contactos.md`, y de con que se resuelve cada requisito.
 
-Ultima actualizacion: 2026-10-07 (modulo `horizontic_contacts` instalado).
+Ultima actualizacion: 2026-10-08 (revisado contra el estado actual de Odoo).
 
 ## 1. Cambios de nombres y de enfoque
 
@@ -14,7 +14,7 @@ Ultima actualizacion: 2026-10-07 (modulo `horizontic_contacts` instalado).
 | Municipios INE en hoja auxiliar | **`l10n_es_toponyms` + `base_location`** | Odoo autocompleta ciudad y provincia a partir del CP. No hace falta importar la hoja Municipios |
 | `bank_id` informado a mano | **Automatico** desde el IBAN | `base_bank_from_iban` (dependencia de `l10n_es_partner`) |
 | `ref` sin restriccion | **`ref` unico entre empresas** | Modulo OCA `partner_ref_unique`, configurado en "Solo empresas" |
-| Campos `x_studio_*` creados con Studio | **Modulo propio `horizontic_contacts`** con nombres sin prefijo (propuesta, pendiente de confirmar): `sucesor_id`, `bni_es_miembro`, `bni_region_id`, `bni_grupo_id`, `bni_estado`, `bni_actividad_id` | Versionado en git y reinstalable. Studio no esta instalado |
+| Campos `x_studio_*` creados con Studio | **Modulo propio `horizontic_contacts`** con nombres sin prefijo (propuesta, pendiente de confirmar): `sucesor_id`, `bni_es_miembro`, `bni_region_id`, `bni_grupo_id`, `bni_estado`, `bni_actividad_id` | Versionado en git y reinstalable en otro entorno. Studio esta instalado, pero no se usa para estos campos |
 | Modelos `x_region_bni`, `x_grupo_bni`, `x_actividad_bni` | **`bni.region`, `bni.grupo`, `bni.actividad`** (propuesta) | Mismo motivo |
 | "6 campos personalizados" | **6 campos propios + `comercial` de OCA** | Eran 7. El nombre comercial sale de OCA, asi que el modulo propio crea 6 |
 
@@ -59,7 +59,7 @@ Instalado el 2026-10-07 en `custom_modules/horizontic_contacts` (version 19.0.1.
 | Catalogos BNI | Modelos `bni.region`, `bni.grupo` (con `region_id`) y `bni.actividad` (`categoria`, `descripcion`). Menu Contactos -> Configuracion -> BNI. Nombres unicos (actividad: unica por categoria). Lectura para todos los usuarios; alta y edicion para el grupo "Creacion de contactos" |
 | Campos BNI | `bni_es_miembro`, `bni_region_id`, `bni_grupo_id`, `bni_estado` (activo/baja/pendiente/suspendido), `bni_actividad_id`. No se puede borrar una region, grupo o actividad en uso |
 | Cascada Region -> Grupo | El desplegable de Grupo filtra por la Region elegida. Al elegir un grupo, la region se rellena sola. Si se cambia la region, se vacia un grupo que no le corresponda. Una region y un grupo incoherentes dan error al guardar o importar |
-| Pestana "BNI" | Primera pestana del formulario de persona, visible solo si `bni_es_miembro`. Oculta en empresas. El check "Es miembro BNI" esta debajo de "Puesto de trabajo" |
+| Pestana "BNI" | Justo despues de la pestana "Contactos" en el formulario de persona, visible solo si `bni_es_miembro`. Oculta en empresas. El check "Es miembro BNI" esta debajo de "Puesto de trabajo" |
 | Nombre comercial | Se mueve justo **debajo del nombre** (OCA lo ponia tras la empresa) y se anade como **columna visible en la lista** |
 | Buscador de contactos | Filtro "Miembros BNI", busqueda por grupo y actividad BNI y agrupacion por region, grupo y estado BNI |
 
@@ -72,12 +72,17 @@ Comportamientos a tener en cuenta:
 ## 4. Configuracion realizada
 
 - Contenedores `horizontic_odoo` y `horizontic_postgres` con `restart: unless-stopped`: se levantan solos al reiniciar el servidor. Al recrearlos la imagen ha pasado de Odoo `19.0-20260810` a `19.0-20260926`.
-- Perfil de la compania rellenado con datos publicos de horizontic.es: nombre HORIZONtic, Ugartebeitia 7, 3ª Planta, Dpto. 6, 48903 Barakaldo (Bizkaia), +34 846 664 231, administracion@horizontic.es, https://horizontic.es, y el logo. **Sin CIF**: no esta publicado.
+- Perfil de la compania rellenado con datos publicos de horizontic.es: nombre HORIZONtic, Ugartebeitia 7, 3ª Planta, Dpto. 6, 48903 Barakaldo (Bizkaia), +34 846 664 231, administracion@horizontic.es, https://horizontic.es, y el logo.
 - `partner_ref_unique` en modo "Solo empresas".
 - `entrypoint.sh`: el `addons_path` del servidor lo construye el entrypoint, que ignora `odoo.conf`. Ahora incluye `custom_modules/` (si hay modulos) y cada repo clonado en `community/`. Antes no cargaba ni los repos OCA ni los modulos propios.
 
 ## 5. Configuracion nativa
 
-Hecho por el usuario (comprobado el 2026-10-07): plan contable **`es_full`** (PGC completo, no PYMES) con moneda EUR, Compras instalado, euskera activo y CIF de la compania informado.
+Hecho por el usuario (comprobado el 2026-10-08):
+- Plan contable **`es_full`** (PGC completo, no el PYMES que daba por hecho la especificacion), moneda EUR, 745 cuentas de 6 digitos.
+- Compras (`purchase`) instalado.
+- Studio (`web_studio`) instalado.
+- Euskera (`eu_ES`) activo.
+- CIF de la compania informado (A95921060).
 
 Pendiente: crear las subcuentas legacy 43/41 cuando lleguen los datos.

@@ -23,7 +23,7 @@
                        options="{'no_create': True}"/>
             </field>
 
-            <xpath expr="//notebook/page[@name='contact_addresses']" position="before">
+            <xpath expr="//notebook/page[@name='contact_addresses']" position="after">
                 <page name="bni" string="BNI" invisible="is_company or not bni_es_miembro">
                     <group>
                         <group>
